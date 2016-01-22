@@ -1,0 +1,56 @@
+$box-bg: #157CD6;
+
+.ratesHeading {
+  margin: 100px auto;
+  max-width: 800px;
+  display: block;
+  text-align: center;
+
+  h1 {
+    font-size: 4em;
+  }
+}
+
+.ratesContainer {
+  color: #DAECFB;
+  display: block;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.singleSession {
+  margin: 50px 0 0 100px;
+  padding: 5px 0 30px 30px;
+  max-width: 600px;
+  min-height: 200px;
+  background: $box-bg;
+  border-radius: 25px;
+
+
+}
+
+.singleSessionTable {
+  margin-left: 50px;
+}
+
+.price {
+  padding-left: 100px;
+  font-size: 3em;
+}
+
+.terms {
+  padding-left: 100px;
+}
+
+.multiSession {
+  margin: 50px 0 0 100px;
+  padding: 5px 0 30px 30px;
+  max-width: 600px;
+  min-height: 200px;
+  background: $box-bg;
+  border-radius: 25px;
+
+  h2 {
+    margin-top: 10px;
+  }
+}

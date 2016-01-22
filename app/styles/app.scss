@@ -1,0 +1,228 @@
+$icon-font-path: '../fonts/';
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans);
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+/* Global Styles
+-------------------------------------------------- */
+
+body {
+  padding-bottom: 40px;
+  color: #5a5a5a;
+  font-family: 'Noto Sans', sans-serif;
+  background-color: #eef0e7;
+}
+
+/* Navbar
+-------------------------------------------------- */
+
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
+
+/* Flip around the padding for proper display in narrow viewports */
+.navbar-wrapper > .container {
+  padding-right: 0;
+  padding-left: 0;
+}
+.navbar-wrapper .navbar {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.navbar-wrapper .navbar .container {
+  width: auto;
+}
+
+.navbar-inverse .navbar-nav .navbar-session-btn {
+  background-color: transparent;
+  margin-bottom: 0rem;
+  padding: .55rem;
+  color: #fff;
+  border-color: #5290CD;
+  font-size: 20px;
+  transition: margin .1s linear;
+
+  &:hover {
+    margin: .3rem;
+    text-decoration: none;
+    font-size: 1.1em;
+
+    a {
+      color: #EEF0E7;
+      text-decoration: none;
+    }
+  }
+}
+
+.navbar-session-btn-link {
+  color: #5290CD;
+  transition: font-size 0.2s ease;
+}
+
+
+/* Header
+-------------------------------------------------- */
+
+.header-photo {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 700px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+  background: url('app/images/logo.png') no-repeat center center fixed;
+  background-size: cover;
+  transition: background 0.8s ease;
+}
+
+.header-jumbotron {
+  align-self: center;
+  padding: 2rem 3rem;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 2rem;
+  color: #EEF0E7;
+  text-shadow: 2px 2px 10px #222;
+
+  h1, p {
+    text-align: center;
+  }
+}
+
+.header-jumbotron-btn {
+  background-color: rgba(82,144,205,0.7);
+  border: 3px solid rgba(82,144,205,0.2);
+  transition: .1s linear;
+  a {
+    color: #EEF0E7;
+    text-decoration: none;
+    font-size: 1.5em;
+  }
+
+
+  &:hover {
+    background-color: inherit;
+    margin: .3rem;
+    text-decoration: none;
+    font-size: 1.1em;
+    background-color: rgba(82,144,205,0.7);
+    border: 3px solid rgba(82,144,205,0.2);
+  }
+}
+
+/* Tumblr info will go here
+-------------------------------------------------- */
+
+
+.tumblr-embed {
+  margin: 0 auto;
+  width: 500px;
+}
+
+.tumblr-embed-title {
+  margin-bottom: 20px;
+}
+
+.tumblr-asset {
+  margin-bottom: 20px;
+}
+
+.tumblr-caption {
+  margin-bottom: 40px;
+}
+
+.hide-instagram-embed {
+  display: none;
+}
+
+/* Rates Tables
+-------------------------------------------------- */
+@import 'rates';
+
+/* Contact Form
+-------------------------------------------------- */
+@import 'contact';
+
+/* Meet Cory
+-------------------------------------------------- */
+
+@import 'meet-cory';
+
+/* Media queries
+-------------------------------------------------- */
+
+@media (min-width: 768px) {
+// Navbar positioning
+  .navbar-wrapper {
+    margin-top: 20px;
+  }
+
+  .navbar-wrapper .container {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .navbar-wrapper .navbar {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .navbar-nav {
+    float: right;
+    font-size: 1.5em;
+
+      .action-btn {
+      padding: 8px;
+      vertical-align: middle;
+      margin: 6px 0 0px 0;
+      }
+  }
+
+  .navbar-fixed-top {
+    border-width: 0;
+    background-color: rgba(0,0,5,0.9);
+    .container {
+      padding-right: 6px;
+    }
+  }
+
+  .textbox {
+    max-width: 500px;
+    margin: 20px auto 0 auto;
+  }
+
+  // The navbar becomes detached from the top, so we round the corners
+  .navbar-wrapper .navbar {
+    border-radius: 0 0 4px 4px;
+  }
+
+  // Bump up size of call-to-action content
+  .carousel-caption p {
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: 1.4;
+  }
+
+  .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+footer {
+  padding: 0 50px;
+}
+
+@media (min-width: 992px) {
+  .featurette-heading {
+    margin-top: 120px;
+  }
+}
