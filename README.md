@@ -8,4 +8,4 @@ The architecture of the site was completely rewritten to be a snappy
 JavaScript application using React, React-Router, Webpack, and even some jQuery
 for AJAX calls.  
 
-The UX and design still need a lot of work. Each page will be getting a complete makeover and Google Forms will ditched soon from the contact page.
+The UX and design still need a lot of work. Each page will be getting a complete makeover.
