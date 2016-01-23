@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, Link, IndexLink, IndexRoute } from 'react-router';
+import { Router, Route, Link, IndexLink, IndexRoute, browserHistory } from 'react-router';
 import { IntlProvider, FormattedDate } from 'react-intl';
 
 import Contact from './components/Contact.js';
@@ -34,6 +34,6 @@ let routes = (
 
 render(
   <IntlProvider locale="en">
-    <Router routes={routes}/>
-  </IntlProvider>, 
+    <Router history={browserHistory} routes={routes}/>
+  </IntlProvider>,
   document.getElementById('react'));
