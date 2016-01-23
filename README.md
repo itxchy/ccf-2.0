@@ -1,15 +1,11 @@
-# react-bootstrap-webpack-starter
+# [http://www.ChiCityFitness.com/](http://www.ChiCityFitness.com/)
 
-A simple bootstrappy client-side web app starter kit powered by React
-and webpack.
+A website for Chi City Fitness.
 
-### Usage
+## 2.0.0
 
-`npm install`
-`npm start` : Start up a development server
-`npm run build` : builds the app into the `/build` folder
+The architecture of the site was completely rewritten to be a snappy
+JavaScript application using React, React-Router, Webpack, and even some jQuery
+for AJAX calls.  
 
-### Docs
-
-* [react-router](https://github.com/rackt/react-router/tree/latest/docs)  
-* [bootstrap-loader](https://github.com/shakacode/bootstrap-loader)
+The UX and design still need a lot of work. Each page will be getting a complete makeover and Google Forms will ditched soon from the contact page.
