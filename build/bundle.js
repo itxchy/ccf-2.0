@@ -46,7 +46,7 @@
 
 	__webpack_require__(1);
 	__webpack_require__(9);
-	module.exports = __webpack_require__(253);
+	module.exports = __webpack_require__(254);
 
 
 /***/ },
@@ -440,29 +440,35 @@
 
 	var _reactRouter = __webpack_require__(163);
 
-	var _Contact = __webpack_require__(210);
+	var _createBrowserHistory = __webpack_require__(210);
+
+	var _createBrowserHistory2 = _interopRequireDefault(_createBrowserHistory);
+
+	var _Contact = __webpack_require__(211);
 
 	var _Contact2 = _interopRequireDefault(_Contact);
 
-	var _MeetCory = __webpack_require__(211);
+	var _MeetCory = __webpack_require__(212);
 
 	var _MeetCory2 = _interopRequireDefault(_MeetCory);
 
-	var _Rates = __webpack_require__(212);
+	var _Rates = __webpack_require__(213);
 
 	var _Rates2 = _interopRequireDefault(_Rates);
 
-	var _Home = __webpack_require__(213);
+	var _Home = __webpack_require__(214);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
-	var _Navbar = __webpack_require__(252);
+	var _Navbar = __webpack_require__(253);
 
 	var _Navbar2 = _interopRequireDefault(_Navbar);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
 	}
+
+	var history = (0, _createBrowserHistory2.default)();
 
 	var App = _react2.default.createClass({
 	  displayName: 'App',
@@ -473,7 +479,7 @@
 
 	var routes = _react2.default.createElement(_reactRouter.Route, { path: '/', component: App }, _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }), _react2.default.createElement(_reactRouter.Route, { path: '/meet-cory', component: _MeetCory2.default }), _react2.default.createElement(_reactRouter.Route, { path: '/contact', component: _Contact2.default }), _react2.default.createElement(_reactRouter.Route, { path: '/rates', component: _Rates2.default }));
 
-	(0, _reactDom.render)(_react2.default.createElement(_reactRouter.Router, { history: _reactRouter.browserHistory, routes: routes }), document.getElementById('react'));
+	(0, _reactDom.render)(_react2.default.createElement(_reactRouter.Router, { history: history, routes: routes }), document.getElementById('react'));
 
 /***/ },
 /* 10 */
@@ -23711,6 +23717,189 @@
 /* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _invariant = __webpack_require__(167);
+
+	var _invariant2 = _interopRequireDefault(_invariant);
+
+	var _Actions = __webpack_require__(168);
+
+	var _ExecutionEnvironment = __webpack_require__(169);
+
+	var _DOMUtils = __webpack_require__(170);
+
+	var _DOMStateStorage = __webpack_require__(171);
+
+	var _createDOMHistory = __webpack_require__(172);
+
+	var _createDOMHistory2 = _interopRequireDefault(_createDOMHistory);
+
+	var _parsePath = __webpack_require__(179);
+
+	var _parsePath2 = _interopRequireDefault(_parsePath);
+
+	/**
+	 * Creates and returns a history object that uses HTML5's history API
+	 * (pushState, replaceState, and the popstate event) to manage history.
+	 * This is the recommended method of managing history in browsers because
+	 * it provides the cleanest URLs.
+	 *
+	 * Note: In browsers that do not support the HTML5 history API full
+	 * page reloads will be used to preserve URLs.
+	 */
+	function createBrowserHistory() {
+	  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	  !_ExecutionEnvironment.canUseDOM ?  false ? _invariant2['default'](false, 'Browser history needs a DOM') : _invariant2['default'](false) : undefined;
+
+	  var forceRefresh = options.forceRefresh;
+
+	  var isSupported = _DOMUtils.supportsHistory();
+	  var useRefresh = !isSupported || forceRefresh;
+
+	  function getCurrentLocation(historyState) {
+	    historyState = historyState || window.history.state || {};
+
+	    var path = _DOMUtils.getWindowPath();
+	    var _historyState = historyState;
+	    var key = _historyState.key;
+
+	    var state = undefined;
+	    if (key) {
+	      state = _DOMStateStorage.readState(key);
+	    } else {
+	      state = null;
+	      key = history.createKey();
+
+	      if (isSupported) window.history.replaceState(_extends({}, historyState, { key: key }), null, path);
+	    }
+
+	    var location = _parsePath2['default'](path);
+
+	    return history.createLocation(_extends({}, location, { state: state }), undefined, key);
+	  }
+
+	  function startPopStateListener(_ref) {
+	    var transitionTo = _ref.transitionTo;
+
+	    function popStateListener(event) {
+	      if (event.state === undefined) return; // Ignore extraneous popstate events in WebKit.
+
+	      transitionTo(getCurrentLocation(event.state));
+	    }
+
+	    _DOMUtils.addEventListener(window, 'popstate', popStateListener);
+
+	    return function () {
+	      _DOMUtils.removeEventListener(window, 'popstate', popStateListener);
+	    };
+	  }
+
+	  function finishTransition(location) {
+	    var basename = location.basename;
+	    var pathname = location.pathname;
+	    var search = location.search;
+	    var hash = location.hash;
+	    var state = location.state;
+	    var action = location.action;
+	    var key = location.key;
+
+	    if (action === _Actions.POP) return; // Nothing to do.
+
+	    _DOMStateStorage.saveState(key, state);
+
+	    var path = (basename || '') + pathname + search + hash;
+	    var historyState = {
+	      key: key
+	    };
+
+	    if (action === _Actions.PUSH) {
+	      if (useRefresh) {
+	        window.location.href = path;
+	        return false; // Prevent location update.
+	      } else {
+	          window.history.pushState(historyState, null, path);
+	        }
+	    } else {
+	      // REPLACE
+	      if (useRefresh) {
+	        window.location.replace(path);
+	        return false; // Prevent location update.
+	      } else {
+	          window.history.replaceState(historyState, null, path);
+	        }
+	    }
+	  }
+
+	  var history = _createDOMHistory2['default'](_extends({}, options, {
+	    getCurrentLocation: getCurrentLocation,
+	    finishTransition: finishTransition,
+	    saveState: _DOMStateStorage.saveState
+	  }));
+
+	  var listenerCount = 0,
+	      stopPopStateListener = undefined;
+
+	  function listenBefore(listener) {
+	    if (++listenerCount === 1) stopPopStateListener = startPopStateListener(history);
+
+	    var unlisten = history.listenBefore(listener);
+
+	    return function () {
+	      unlisten();
+
+	      if (--listenerCount === 0) stopPopStateListener();
+	    };
+	  }
+
+	  function listen(listener) {
+	    if (++listenerCount === 1) stopPopStateListener = startPopStateListener(history);
+
+	    var unlisten = history.listen(listener);
+
+	    return function () {
+	      unlisten();
+
+	      if (--listenerCount === 0) stopPopStateListener();
+	    };
+	  }
+
+	  // deprecated
+	  function registerTransitionHook(hook) {
+	    if (++listenerCount === 1) stopPopStateListener = startPopStateListener(history);
+
+	    history.registerTransitionHook(hook);
+	  }
+
+	  // deprecated
+	  function unregisterTransitionHook(hook) {
+	    history.unregisterTransitionHook(hook);
+
+	    if (--listenerCount === 0) stopPopStateListener();
+	  }
+
+	  return _extends({}, history, {
+	    listenBefore: listenBefore,
+	    listen: listen,
+	    registerTransitionHook: registerTransitionHook,
+	    unregisterTransitionHook: unregisterTransitionHook
+	  });
+	}
+
+	exports['default'] = createBrowserHistory;
+	module.exports = exports['default'];
+
+/***/ },
+/* 211 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -23740,7 +23929,7 @@
 	exports.default = Contact;
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23767,7 +23956,7 @@
 	exports.default = MeetCory;
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -23794,7 +23983,7 @@
 	exports.default = Rates;
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23809,11 +23998,11 @@
 
 	var _reactRouter = __webpack_require__(163);
 
-	var _Tumblr = __webpack_require__(214);
+	var _Tumblr = __webpack_require__(215);
 
 	var _Tumblr2 = _interopRequireDefault(_Tumblr);
 
-	var _Test = __webpack_require__(251);
+	var _Test = __webpack_require__(252);
 
 	var _Test2 = _interopRequireDefault(_Test);
 
@@ -23840,7 +24029,7 @@
 	// </div>
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23855,7 +24044,7 @@
 
 	var _reactRouter = __webpack_require__(163);
 
-	var _reactIntl = __webpack_require__(215);
+	var _reactIntl = __webpack_require__(216);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -23917,7 +24106,7 @@
 	// );
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -23936,55 +24125,55 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _intlMessageformat = __webpack_require__(216);
+	var _intlMessageformat = __webpack_require__(217);
 
-	var _intlRelativeformat = __webpack_require__(226);
+	var _intlRelativeformat = __webpack_require__(227);
 
-	var _en = __webpack_require__(233);
+	var _en = __webpack_require__(234);
 
 	var _en2 = _interopRequireDefault(_en);
 
-	var _componentsIntl = __webpack_require__(234);
+	var _componentsIntl = __webpack_require__(235);
 
 	exports.IntlProvider = _interopRequire(_componentsIntl);
 
-	var _componentsGroup = __webpack_require__(242);
+	var _componentsGroup = __webpack_require__(243);
 
 	exports.FormattedGroup = _interopRequire(_componentsGroup);
 
-	var _componentsDate = __webpack_require__(243);
+	var _componentsDate = __webpack_require__(244);
 
 	exports.FormattedDate = _interopRequire(_componentsDate);
 
-	var _componentsTime = __webpack_require__(244);
+	var _componentsTime = __webpack_require__(245);
 
 	exports.FormattedTime = _interopRequire(_componentsTime);
 
-	var _componentsRelative = __webpack_require__(245);
+	var _componentsRelative = __webpack_require__(246);
 
 	exports.FormattedRelative = _interopRequire(_componentsRelative);
 
-	var _componentsNumber = __webpack_require__(246);
+	var _componentsNumber = __webpack_require__(247);
 
 	exports.FormattedNumber = _interopRequire(_componentsNumber);
 
-	var _componentsPlural = __webpack_require__(247);
+	var _componentsPlural = __webpack_require__(248);
 
 	exports.FormattedPlural = _interopRequire(_componentsPlural);
 
-	var _componentsMessage = __webpack_require__(248);
+	var _componentsMessage = __webpack_require__(249);
 
 	exports.FormattedMessage = _interopRequire(_componentsMessage);
 
-	var _componentsHtmlMessage = __webpack_require__(249);
+	var _componentsHtmlMessage = __webpack_require__(250);
 
 	exports.FormattedHTMLMessage = _interopRequire(_componentsHtmlMessage);
 
-	var _inject = __webpack_require__(250);
+	var _inject = __webpack_require__(251);
 
 	exports.injectIntl = _interopRequire(_inject);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
 	exports.intlShape = _types.intlShape;
 
@@ -24007,18 +24196,18 @@
 	addLocaleData(_en2['default']);
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* jshint node:true */
 
 	'use strict';
 
-	var IntlMessageFormat = __webpack_require__(217)['default'];
+	var IntlMessageFormat = __webpack_require__(218)['default'];
 
 	// Add all locale data to `IntlMessageFormat`. This module will be ignored when
 	// bundling for the browser with Browserify/Webpack.
-	__webpack_require__(225);
+	__webpack_require__(226);
 
 	// Re-export `IntlMessageFormat` as the CommonJS default exports with all the
 	// locale data registered, and with English set as the default locale. Define
@@ -24028,13 +24217,13 @@
 
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* jslint esnext: true */
 
 	"use strict";
-	var src$core$$ = __webpack_require__(218), src$en$$ = __webpack_require__(224);
+	var src$core$$ = __webpack_require__(219), src$en$$ = __webpack_require__(225);
 
 	src$core$$["default"].__addLocaleData(src$en$$["default"]);
 	src$core$$["default"].defaultLocale = 'en';
@@ -24044,7 +24233,7 @@
 	//# sourceMappingURL=main.js.map
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -24056,7 +24245,7 @@
 	/* jslint esnext: true */
 
 	"use strict";
-	var src$utils$$ = __webpack_require__(219), src$es5$$ = __webpack_require__(220), src$compiler$$ = __webpack_require__(221), intl$messageformat$parser$$ = __webpack_require__(222);
+	var src$utils$$ = __webpack_require__(220), src$es5$$ = __webpack_require__(221), src$compiler$$ = __webpack_require__(222), intl$messageformat$parser$$ = __webpack_require__(223);
 	exports["default"] = MessageFormat;
 
 	// -- MessageFormat --------------------------------------------------------
@@ -24313,7 +24502,7 @@
 	//# sourceMappingURL=core.js.map
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports) {
 
 	/*
@@ -24350,7 +24539,7 @@
 	//# sourceMappingURL=utils.js.map
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -24362,7 +24551,7 @@
 	/* jslint esnext: true */
 
 	"use strict";
-	var src$utils$$ = __webpack_require__(219);
+	var src$utils$$ = __webpack_require__(220);
 
 	// Purposely using the same implementation as the Intl.js `Intl` polyfill.
 	// Copyright 2013 Andy Earnshaw, MIT License
@@ -24404,7 +24593,7 @@
 	//# sourceMappingURL=es5.js.map
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports) {
 
 	/*
@@ -24618,17 +24807,17 @@
 	//# sourceMappingURL=compiler.js.map
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports = module.exports = __webpack_require__(223)['default'];
+	exports = module.exports = __webpack_require__(224)['default'];
 	exports['default'] = exports;
 
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25974,7 +26163,7 @@
 	//# sourceMappingURL=parser.js.map
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports) {
 
 	// GENERATED FILE
@@ -25984,24 +26173,24 @@
 	//# sourceMappingURL=en.js.map
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* jshint node:true */
 
 	'use strict';
 
-	var IntlRelativeFormat = __webpack_require__(227)['default'];
+	var IntlRelativeFormat = __webpack_require__(228)['default'];
 
 	// Add all locale data to `IntlRelativeFormat`. This module will be ignored when
 	// bundling for the browser with Browserify/Webpack.
-	__webpack_require__(232);
+	__webpack_require__(233);
 
 	// Re-export `IntlRelativeFormat` as the CommonJS default exports with all the
 	// locale data registered, and with English set as the default locale. Define
@@ -26011,13 +26200,13 @@
 
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* jslint esnext: true */
 
 	"use strict";
-	var src$core$$ = __webpack_require__(228), src$en$$ = __webpack_require__(231);
+	var src$core$$ = __webpack_require__(229), src$en$$ = __webpack_require__(232);
 
 	src$core$$["default"].__addLocaleData(src$en$$["default"]);
 	src$core$$["default"].defaultLocale = 'en';
@@ -26027,7 +26216,7 @@
 	//# sourceMappingURL=main.js.map
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -26039,7 +26228,7 @@
 	/* jslint esnext: true */
 
 	"use strict";
-	var intl$messageformat$$ = __webpack_require__(216), src$diff$$ = __webpack_require__(229), src$es5$$ = __webpack_require__(230);
+	var intl$messageformat$$ = __webpack_require__(217), src$diff$$ = __webpack_require__(230), src$es5$$ = __webpack_require__(231);
 	exports["default"] = RelativeFormat;
 
 	// -----------------------------------------------------------------------------
@@ -26329,7 +26518,7 @@
 	//# sourceMappingURL=core.js.map
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports) {
 
 	/*
@@ -26380,7 +26569,7 @@
 	//# sourceMappingURL=diff.js.map
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports) {
 
 	/*
@@ -26460,7 +26649,7 @@
 	//# sourceMappingURL=es5.js.map
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports) {
 
 	// GENERATED FILE
@@ -26470,13 +26659,13 @@
 	//# sourceMappingURL=en.js.map
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 233 */
+/* 234 */
 /***/ function(module, exports) {
 
 	// GENERATED FILE
@@ -26493,7 +26682,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -26518,27 +26707,27 @@
 
 	var _react = __webpack_require__(10);
 
-	var _intlMessageformat = __webpack_require__(216);
+	var _intlMessageformat = __webpack_require__(217);
 
 	var _intlMessageformat2 = _interopRequireDefault(_intlMessageformat);
 
-	var _intlRelativeformat = __webpack_require__(226);
+	var _intlRelativeformat = __webpack_require__(227);
 
 	var _intlRelativeformat2 = _interopRequireDefault(_intlRelativeformat);
 
-	var _plural = __webpack_require__(235);
+	var _plural = __webpack_require__(236);
 
 	var _plural2 = _interopRequireDefault(_plural);
 
-	var _intlFormatCache = __webpack_require__(236);
+	var _intlFormatCache = __webpack_require__(237);
 
 	var _intlFormatCache2 = _interopRequireDefault(_intlFormatCache);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _format = __webpack_require__(241);
+	var _format = __webpack_require__(242);
 
 	var format = _interopRequireWildcard(_format);
 
@@ -26638,7 +26827,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -26657,7 +26846,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _intlMessageformat = __webpack_require__(216);
+	var _intlMessageformat = __webpack_require__(217);
 
 	var _intlMessageformat2 = _interopRequireDefault(_intlMessageformat);
 
@@ -26688,21 +26877,21 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports = module.exports = __webpack_require__(237)['default'];
+	exports = module.exports = __webpack_require__(238)['default'];
 	exports['default'] = exports;
 
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var src$es5$$ = __webpack_require__(238);
+	var src$es5$$ = __webpack_require__(239);
 	exports["default"] = createFormatCache;
 
 	// -----------------------------------------------------------------------------
@@ -26779,7 +26968,7 @@
 	//# sourceMappingURL=memoizer.js.map
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26826,7 +27015,7 @@
 	//# sourceMappingURL=es5.js.map
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -26913,7 +27102,7 @@
 	}
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27008,7 +27197,7 @@
 	exports.pluralFormatPropTypes = pluralFormatPropTypes;
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27028,9 +27217,9 @@
 	exports.formatMessage = formatMessage;
 	exports.formatHTMLMessage = formatHTMLMessage;
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	var DATE_TIME_FORMAT_OPTIONS = Object.keys(_types.dateTimeFormatPropTypes);
 	var NUMBER_FORMAT_OPTIONS = Object.keys(_types.numberFormatPropTypes);
@@ -27202,7 +27391,7 @@
 	}
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27260,7 +27449,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27285,9 +27474,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	var FormattedDate = (function (_Component) {
 	    _inherits(FormattedDate, _Component);
@@ -27341,7 +27530,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27366,9 +27555,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	var FormattedTime = (function (_Component) {
 	    _inherits(FormattedTime, _Component);
@@ -27422,7 +27611,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27447,9 +27636,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	var FormattedRelative = (function (_Component) {
 	    _inherits(FormattedRelative, _Component);
@@ -27504,7 +27693,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27529,9 +27718,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	var FormattedNumber = (function (_Component) {
 	    _inherits(FormattedNumber, _Component);
@@ -27585,7 +27774,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27610,9 +27799,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	var FormattedPlural = (function (_Component) {
 	    _inherits(FormattedPlural, _Component);
@@ -27680,7 +27869,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27703,9 +27892,9 @@
 
 	var _react = __webpack_require__(10);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	var FormattedMessage = (function (_Component) {
 	    _inherits(FormattedMessage, _Component);
@@ -27824,7 +28013,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27845,9 +28034,9 @@
 
 	var _react = __webpack_require__(10);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	var FormattedHTMLMessage = (function (_Component) {
 	    _inherits(FormattedHTMLMessage, _Component);
@@ -27936,7 +28125,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27965,9 +28154,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _types = __webpack_require__(240);
+	var _types = __webpack_require__(241);
 
-	var _utils = __webpack_require__(239);
+	var _utils = __webpack_require__(240);
 
 	function getDisplayName(Component) {
 	    return Component.displayName || Component.name || 'Component';
@@ -28009,7 +28198,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28056,7 +28245,7 @@
 	exports.default = UserGist;
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28069,7 +28258,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Home = __webpack_require__(213);
+	var _Home = __webpack_require__(214);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
@@ -28102,22 +28291,22 @@
 	exports.default = Navbar;
 
 /***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(254);
-
-
-/***/ },
 /* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__ (255);
-	__webpack_require__ (8);
+	__webpack_require__(255);
 
 
 /***/ },
 /* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__ (256);
+	__webpack_require__ (8);
+
+
+/***/ },
+/* 256 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
