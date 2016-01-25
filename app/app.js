@@ -1,12 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link, IndexLink, IndexRoute, browserHistory } from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 import Contact from './components/Contact.js';
 import MeetCory from './components/MeetCory.js';
 import Rates from './components/Rates.js';
 import Home from './components/Home.js';
 import Navbar from './components/Navbar.js';
+
+const history = createBrowserHistory();
 
 let App = React.createClass({
   render () {
@@ -32,5 +35,5 @@ let routes = (
 );
 
 render(
-  <Router history={browserHistory} routes={routes}/>,
+  <Router history={history} routes={routes}/>,
   document.getElementById('react'));
