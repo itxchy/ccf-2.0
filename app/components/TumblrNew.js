@@ -45,9 +45,7 @@ var TumblrNew = React.createClass({
 
       return (
       <div key={post.timestamp}>
-        <p>     
-          {post.date}
-        </p>
+
         {asset}
         <div className="tumblr-caption" dangerouslySetInnerHTML={{__html: post.caption}}></div>
       </div>
