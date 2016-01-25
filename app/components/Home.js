@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Tumblr from './Tumblr';
-import TumblrNew from './TumblrNew';
 import UserGist from './Test';
 
 let Home = React.createClass({
@@ -25,7 +24,7 @@ let Home = React.createClass({
         </header>
         <section className="tumblr-embed">
           <h1 className="text-center tumblr-embed-title">Recent Blog Posts</h1>
-          <TumblrNew />
+          <Tumblr />
         </section>
 
       </div>

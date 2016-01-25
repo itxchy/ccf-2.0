@@ -1,67 +1,60 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Link } from 'react-router';
+import { IntlProvider, FormattedDate } from 'react-intl';
 
 var Tumblr = React.createClass({
 
-  propTypes: {
-    postNumber: React.PropTypes.number
-  },
-
   getInitialState: () => {
-
     return {
-      postType: '',
-      postDate: '',
-      postTitle: '',
-      postCaption: '',
-      postAsset: ''
+      apiData: [],
+      numberOfPosts: 5
     };
   },
 
   componentDidMount: function() {
+
     var API_Source = "https://api.tumblr.com/v2/blog/chicityfitness.tumblr.com/posts?api_key=A3dkZ4zIBjapE3IgRD4oO5JZHcwtxfNseZY5YXZm8OpbDKTtz9&callback=?";
-    console.log("api source: ",API_Source);
+
     $.getJSON(API_Source, function(result) {
-      var thisPost = result.response.posts[this.props.postNumber];
-      var thisPostType = thisPost.type;
-
       if(this.isMounted()) {
-
+        let recentPosts = result.response.posts.slice(0, this.state.numberOfPosts);
+        // let recentPosts = result.response.posts;
+        console.log("recentPosts: " + $.isArray(recentPosts));
         this.setState({
-          postDate: thisPost.timestamp,
-          postCaption: thisPost.caption
+          apiData: recentPosts
         });
+      }
+    }.bind(this));
 
-        if(thisPostType === "video") {
-          this.setState({
-            postAsset: thisPost.player[2].embed_code
-          });
-        }
+  },
 
-        if(thisPostType === "photo") {
-          this.setState({
-            postAsset: thisPost.photos[0].alt_sizes[1].url
-          });
-        }
+  render() {
+    console.log("apiData: " + $.isArray(this.state.apiData));
 
-        this.setState({
-          postDate: thisPost.date
-        });
 
+    var posts = this.state.apiData.map((post) => {
+      var asset = "undefined";
+
+      if (post.type === "photo") {
+        asset = <img className="tumblr-asset" src={post.photos[0].alt_sizes[1].url} />;
+        console.log(`photo: ${post.photos[0].alt_sizes[1].url}`);
+      }
+      if (post.type === "video") {
+        asset = <div className="tumblr-asset" dangerouslySetInnerHTML={{__html: post.player[2].embed_code}}></div>;
       }
 
+      return (
+      <div key={post.timestamp}>
 
-    }.bind(this));
-  },
-// see this Stack Overflow answer for inserting asset HTML
-// http://stackoverflow.com/questions/23616226/insert-html-with-react-variable-statements-jsx
-  render() {
-    return(
+        {asset}
+        <div className="tumblr-caption" dangerouslySetInnerHTML={{__html: post.caption}}></div>
+      </div>
+      );
+    });
+
+    return (
       <div>
-        <p>{this.state.postDate} DATE</p>
-        <TumblrAsset assetLink="{this.state.postAsset}" />
-        <div dangerouslySetInnerHTML={{__html: this.state.postCaption}}>
-        </div>
+        {posts}
       </div>
     );
   }
@@ -70,10 +63,8 @@ var Tumblr = React.createClass({
 
 export default Tumblr;
 
-// <div>
-//   <p>{this.state.postDate} DATE</p>
-//   <div dangerouslySetInnerHTML={{__html: this.state.postAsset}}>
+// return (
+//   <div>
+//     {posts}
 //   </div>
-//   <div dangerouslySetInnerHTML={{__html: this.state.postCaption}}>
-//   </div>
-// </div>
+// );
