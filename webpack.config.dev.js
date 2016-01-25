@@ -5,7 +5,7 @@ module.exports = {
   entry: [
     'webpack/hot/only-dev-server',
     'bootstrap-loader',
-    './app/app.js'
+    './app/app.js',
   ],
   output: {
     path: __dirname + '/build',

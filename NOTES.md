@@ -1,5 +1,12 @@
 # NOTES
 
+### nasty mobile error
+
+* try removing extracttext plugin from the production config. 
+  maybe test the dev server in iOS somehow
+
+
+
 ### Tumblr call stories
 
 * The most recent five Tumblr posts should be displayed
