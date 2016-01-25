@@ -45,12 +45,8 @@ var TumblrNew = React.createClass({
 
       return (
       <div key={post.timestamp}>
-        <p>
-          <FormattedDate
-            value={post.date}
-            day="numeric"
-            month="long"
-            year="numeric" />
+        <p>     
+          {post.date}
         </p>
         {asset}
         <div className="tumblr-caption" dangerouslySetInnerHTML={{__html: post.caption}}></div>

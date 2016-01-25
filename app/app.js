@@ -1,7 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link, IndexLink, IndexRoute, browserHistory } from 'react-router';
-import { IntlProvider, FormattedDate } from 'react-intl';
 
 import Contact from './components/Contact.js';
 import MeetCory from './components/MeetCory.js';
@@ -33,7 +32,5 @@ let routes = (
 );
 
 render(
-  <IntlProvider locale="en">
-    <Router history={browserHistory} routes={routes}/>
-  </IntlProvider>,
+  <Router history={browserHistory} routes={routes}/>,
   document.getElementById('react'));
