@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link, IndexLink, IndexRoute, browserHistory } from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory'
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import Contact from './components/Contact.js';
 import MeetCory from './components/MeetCory.js';
