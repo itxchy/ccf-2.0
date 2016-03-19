@@ -9,7 +9,7 @@ import Rates from './components/Rates.js';
 import Home from './components/Home.js';
 import Navbar from './components/Navbar.js';
 
-const history = createBrowserHistory();
+let history = createBrowserHistory();
 
 let App = React.createClass({
   render () {

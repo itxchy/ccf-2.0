@@ -37,7 +37,6 @@ let Navbar = React.createClass({
                   <li><Link to="/" onClick={this.handleClick}>Home</Link></li>
                   <li><a href="http://chicityfitness.tumblr.com">Blog</a></li>
                   <li><Link to="/meet-cory">Meet Cory</Link></li>
-                  <li><Link to="/rates">Rates</Link></li>
                   <li><Link to="/contact">Contact</Link></li>
                   <li><button className="btn btn-lg btn-primary action-btn navbar-session-btn"><Link className="navbar-session-btn-link" to="/contact">Schedule a Session!</Link></button></li>
                 </ul>

@@ -3,7 +3,7 @@ import React from 'react';
 let Rates = React.createClass({
 
   render() {
-    return(
+    return (
       <div>
         <div className="ratesHeading">
           <h1>Session Rates</h1>
