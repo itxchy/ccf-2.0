@@ -35,6 +35,7 @@ let Navbar = React.createClass({
               <div id="navbar" className="navbar-collapse collapse">
                 <ul className="nav navbar-nav">
                   <li><Link to="/" onClick={this.handleClick}>Home</Link></li>
+                  <li><Link to="/wellness">Wellness</Link></li>
                   <li><a href="http://chicityfitness.tumblr.com">Blog</a></li>
                   <li><Link to="/meet-cory">Meet Cory</Link></li>
                   <li><Link to="/contact">Contact</Link></li>

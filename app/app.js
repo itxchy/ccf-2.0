@@ -6,6 +6,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import Contact from './components/Contact.js';
 import MeetCory from './components/MeetCory.js';
 import Rates from './components/Rates.js';
+import Wellness from './components/Wellness.js';
 import Home from './components/Home.js';
 import Navbar from './components/Navbar.js';
 
@@ -31,9 +32,8 @@ let routes = (
     <Route path="/meet-cory" component={MeetCory}/>
     <Route path="/contact" component={Contact}/>
     <Route path="/rates" component={Rates}/>
+    <Route path="/wellness" component={Wellness}/>
   </Route>
 );
 
-render(
-  <Router history={history} routes={routes}/>,
-  document.getElementById('react'));
+render(<Router history={history} routes={routes}/>, document.getElementById('react'));
