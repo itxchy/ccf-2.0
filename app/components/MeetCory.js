@@ -5,7 +5,7 @@ let MeetCory = React.createClass({
   render() {
     return(
       <div className="container meet-cory">
-        <img src={'app/images/meetcory.jpg'} alt="Meet Cory Martin" className="img-rounded img-responsive center-block" />
+        <img src={'images/meetcory.jpg'} alt="Meet Cory Martin" className="img-rounded img-responsive center-block" />
         <div className="textbox">
           <p>
             Cory Martin was born and raised in Chicago. Starting at a very young age, 
