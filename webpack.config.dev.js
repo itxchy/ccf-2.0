@@ -31,9 +31,9 @@ module.exports = {
       { test: /\.scss$/,
         loaders: [ 'style', 'css', 'postcss', 'sass' ]
       },
-      /*{ test: /bootstrap-sass\/assets\/javascripts\//,
+      { test: /bootstrap-sass\/assets\/javascripts\//,
         loader: 'imports?jQuery=jquery'
-      },*/
+      },
       { test: /\.(woff2?|ttf|eot|svg)$/,
         loader: 'url?limit=10000'
       },
