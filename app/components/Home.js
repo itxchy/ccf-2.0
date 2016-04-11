@@ -14,6 +14,12 @@ let Home = React.createClass({
               <h1>Personal Training</h1>
               <p>Take charge of your health.</p>
               <p>Cory Martin can help you define and achieve your fitness goals.</p>
+              <ul>
+                <li>1 on 1 personal training</li>
+                <li>A personalized workout plan that is unique to your goals and experience</li>
+                <li>Nutrition analysis and education</li>
+                <li>Continued education on new exercise and nutrition related science</li>
+              </ul><br/>
               <p>
                 <button className="btn btn-lg btn-primary header-jumbotron-btn">
                   <Link to="/contact">Start training!</Link>
