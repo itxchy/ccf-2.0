@@ -1,15 +1,9 @@
 # TODOS
 
-* Format Wellness text
-* Add the following to the home jumbotron:
-
-> - A personaliized workout plan that is customized based on the clients goals and experience,
-> - 1 on 1 personal training
-> - Nutrition analysis and education
-> - continued education on new exercise and nutrition related science. 
-
 * Fix the Router to match official tutorial, especially with hashHistory
 * Fix mobile hamburger button
+* Investigate Tumblr change
+* Add analytics
 
 # NOTES
 
