@@ -8,4 +8,4 @@ To start the development server with hot reloading:
 `npm start`  
 
 To build and bundle the site with Webpack:
-`npm build`
+`npm run build`
