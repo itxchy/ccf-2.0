@@ -44,7 +44,7 @@ let routes = (
 );
 
 render(<Router 
-        history={history} 
+        history={browserHistory} 
         routes={routes} 
         onUpdate={logPageView} 
         />, 
